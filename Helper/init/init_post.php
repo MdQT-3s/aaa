@@ -19,7 +19,7 @@ if (!isset($post->author)) {
     $post->author = null;
 }
 
-// Проверки прав с учетом $post->author
+
 $canEditPost = !$user->isGuest && $post->author && ($user->id === $post->author->id || $user->isAdmin);
 $canDeletePost = $canEditPost;
 $canComment = !$user->isGuest && !$user->isAdmin;
@@ -27,10 +27,10 @@ $canDeleteComment = function ($comment) use ($user) {
     return !$user->isGuest && ($user->id === $comment->user_id || $user->isAdmin);
 };
 
-// Инициализируем класс комментариев
+
 $commentClass = new CommentClass($user);
 
-// Обработка удаления поста
+//deletPost
 if (
     !$user->isGuest &&
     isset($_GET['action']) &&
@@ -43,7 +43,6 @@ if (
         $post_delete->author &&
         ($user->id == $post_delete->author->id || $user->isAdmin)
     ) {
-        // Удаление всех комментариев к посту
         $comments = $commentClass->get_post_id($post_delete->id);
         if (!empty($comments)) {
             foreach ($comments as $comment) {
@@ -51,7 +50,6 @@ if (
             }
         }
 
-        // Удаление самого поста
         $post_delete->delete();
         $response->redirect('index.php');
         exit;
@@ -59,7 +57,7 @@ if (
 
 }
 
-// Обработка удаления комментария
+//deletComm
 if (
     !$user->isGuest &&
     isset($_GET['delete_comment']) &&
@@ -75,7 +73,7 @@ if (
     }
 }
 
-// Обработка добавления комментария
+// ++Comm
 if (
     !$user->isGuest &&
     !$user->isAdmin &&
@@ -102,5 +100,4 @@ if (
     }
 }
 
-// Получаем комментарии для поста
 $comments = $commentClass->get_post_id($postId);

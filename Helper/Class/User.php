@@ -211,8 +211,6 @@ class User
             return false;
         }
         $row = $result->fetch_assoc();
-
-        // Если date_block NULL — это постоянный бан
         if (is_null($row['date_block'])) {
             return true;
         }

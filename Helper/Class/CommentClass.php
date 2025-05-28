@@ -4,7 +4,7 @@ class CommentClass extends Data
 {
     public $id = null;
     public $post_id = null;
-    public $parent_id = 0; // по умолчанию — это не ответ, а обычный комментарий
+    public $parent_id = 0;
     public $user_id = null;
     public $content = null;
     public $created_at = null;

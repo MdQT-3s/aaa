@@ -28,17 +28,11 @@
 									<!-- один пост/превью -->
 									<div class="col-md-12 col-xl-12">
 										<div class="blog-entry ftco-animate d-md-flex">
-											<!-- 
-											изображение для поста 
-											<a href="single.html" class="img img-2"
-											style="background-image: url(images/image_1.jpg);"></a> 
-										-->
 											<div class="text text-2 pl-md-4">
 												<h3 class="mb-2"><a href="<?= $response->getLink('post.php', ['id' => $postItem->id]) ?>">
 														<?= $postItem->title ?></a></h3>
 												<div class="meta-wrap">
 													<p class="meta">
-														<!-- <img src='avatar.jpg' /> -->
 														<span class="text text-3"><?= $postItem->user->login ?></span>
 														<span><?= $post->formatPostDate($postItem->created_at) ?></span>
 													</p>
