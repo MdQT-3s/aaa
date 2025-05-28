@@ -40,7 +40,7 @@
 
                                 <div class="form-group">
                                     <input type="text" class="form-control <?= !empty($user->validation_patronymic) ? 'is-invalid' : '' ?>"
-                                        placeholder="patronymic" name="patronymic" value="<?= $old['patronymic'] ?? '' ?>">
+                                        placeholder="patronymic if there is " name="patronymic" value="<?= $old['patronymic'] ?? '' ?>">
                                     <?php if (!empty($user->validation_patronymic)): ?>
                                         <div class="invalid-feedback">
                                             <?= $user->validation_patronymic ?>
