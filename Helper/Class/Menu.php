@@ -20,6 +20,9 @@ class Menu
             if ($this->response->user->isAdmin === false && in_array(strtolower($title), ['Пользователи'])) {
                 continue;
             }
+            if ($this->response->user->isGuest === true && in_array(strtolower($title), ['Выход'])) {
+                continue;
+            }
             $params = $item['params'] ?? [];
             $url = $this->response->getLink($file, $params);
             $html .= "<li><a href=\"{$url}\">{$title}</a></li>";
