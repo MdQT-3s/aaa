@@ -14,20 +14,24 @@
 						<div class="col-lg-12 px-md-3 py-5">
 							<?php if (isset($post) && $post->id): ?>
 
-
 								<?php if (!$user->isGuest && ($user->id == ($post->author->id ?? 0) || $user->isAdmin)): ?>
 
 									<div class="mb-3">
 										<a href="<?= $response->getLink('post-create.php', ['id' => $post->id]) ?>"
 											class="text-warning mr-3" style="font-size: 1.8em;" title="Редактировать">🖍</a>
-										<a href="<?= $response->getLink('post.php', ['id' => $post->id, 'action' => 'delete']) ?>"
+									<?php else: ?>
+										<span style="width: 1.8em;"></span>
+									<?php endif; ?>
+
+									<?php if (!$user->isGuest && (($user->id == $post->author->id && empty($comments)) || $user->isAdmin)): ?>
+										<a href="<?= $response->getLink('post.php', ['id' => $post->id, 'action' => 'delete_post']) ?>"
 											class="text-danger" style="font-size: 1.8em;" title="Удалить"
 											onclick="return confirm('Вы уверены?')">🗑</a>
+									<?php else: ?>
+										<span style="width: 1.8em;"></span>
+
 									</div>
 								<?php endif; ?>
-
-
-
 								<div class="post">
 									<h1 class="mb-3"><?= $post->author->login ?></h1>
 									<div class="meta-wrap">
@@ -53,24 +57,7 @@
 
 								<?php if (!empty($comments)): ?>
 									<ul class="comment-list">
-										<?php foreach ($comments as $comment): ?>
-											<li class="comment">
-												<div class="comment-body">
-													<div class="d-flex justify-content-between">
-														<h3><?= $comment->login ?></h3>
-														<?php if (!$user->isGuest && ($user->id == $comment->user_id || $user->isAdmin)): ?>
-															<a href="<?= $response->getLink('post.php', ['id' => $post->id, 'delete_comment' => $comment->id]) ?>"
-																class="text-danger" style="font-size: 1.8em;" title="Удалить"
-																onclick="return confirm('Удалить комментарий?')">🗑</a>
-														<?php endif; ?>
-													</div>
-													<div class="meta">
-														<?= $post->formatPostDate($comment->created_at) ?>
-													</div>
-													<p><?= $comment->content ?? '' ?></p>
-												</div>
-											</li>
-										<?php endforeach; ?>
+										<?php $commentClass->renderCommentsTree($comments, $post, $user, $response, $canDeleteComment); ?>
 									</ul>
 								<?php endif; ?>
 							</div>
