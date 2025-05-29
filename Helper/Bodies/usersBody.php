@@ -46,12 +46,12 @@
 																	class="btn btn-outline-warning px-4">⏳ Block</a>
 															<?php else: ?>
 																<?php if ($userItem['isPermanentlyBlocked']): ?>
-																	<span class="text-muted">Забанен навсегда</span>
+																	<span class="text-muted">Заблокирован навсегда</span>
 																<?php else: ?>
 																	<?php if (!empty($userItem['blockDate'])): ?>
-																		<span class="text-muted">Забанен до <?= $userItem['blockDate']?></span>
+																		<span class="text-muted">Заблокирован до <?= $userItem['blockDate']?></span>
 																	<?php else: ?>
-																		<span class="text-muted">Забанен (дата не указана)</span>
+																		<span class="text-muted">Заблокирован (дата не указана)</span>
 																	<?php endif; ?>
 																<?php endif; ?>
 															<?php endif; ?>

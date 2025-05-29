@@ -34,7 +34,7 @@ $commentClass = new CommentClass($user);
 if (
     !$user->isGuest &&
     isset($_GET['action']) &&
-    $_GET['action'] === 'delete' &&
+    $_GET['action'] === 'delete_post' &&
     isset($_GET['id'])
 ) {
     $post_delete = new PostClass($user);
