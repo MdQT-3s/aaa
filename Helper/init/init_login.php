@@ -9,6 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user->password = $_POST['password'] ?? '';
 
     $validationFailed = $user->validateLogin();
+
     if ($validationFailed) {
 
         if (!empty($user->validation_login)) {

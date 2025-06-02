@@ -24,16 +24,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $dateTime = DateTime::createFromFormat('Y-m-d\TH:i', $dateBlock);
         if ($dateTime !== false) {
             $formatted = $dateTime->format('Y-m-d H:i:s');
+            
+            error_log("Trying to block user $userId until $formatted");
+            
             if ($user->blockTemporarily($userId, $formatted)) {
-                echo "Пользователь временно заблокирован";
+                $response->redirect('users.php', ['token' => $user->token]);
+                exit;
             } else {
-                echo "Ошибка блокировки";
+                $error = "Ошибка при выполнении запроса блокировки";
+                error_log("Block temporarily failed for user $userId");
             }
         } else {
-            echo "Некорректный формат даты.";
+            $error = "Некорректный формат даты. Используйте YYYY-MM-DDTHH:MM";
+            error_log("Invalid date format: $dateBlock");
         }
     } else {
-        echo "Дата не введена.";
+        $error = "Дата не введена";
     }
-
 }
+

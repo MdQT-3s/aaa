@@ -5,6 +5,8 @@ if ($user->isGuest || !$user->isAdmin) {
     $response->redirect('index.php');
     exit;
 }
+$currentTime = date('Y-m-d H:i:s');
+$db->query("DELETE FROM bun WHERE date_block IS NOT NULL AND date_block < '$currentTime'");
 
 $users = [];
 

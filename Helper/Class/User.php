@@ -132,14 +132,12 @@ class User
 
         $user_data = $result->fetch_assoc();
 
+        if ($this->isUserBlocked($user_data['id'])) {
+            $this->validation_login = "Пользователь заблокирован";
+            return false;
+        }
+
         if (!password_verify($this->password, $user_data['password'])) {
-            $checkUser = new self($this->request, $this->db);
-            $checkUser->load($user_data);
-            
-            if ($checkUser->isBlocked()) {
-                $this->validation_login = "Пользователь заблокирован.";
-                return false;
-            }
             $this->validation_password = "Неверный пароль";
             return false;
         }
@@ -203,41 +201,47 @@ class User
 
 
 
-    public function isBlocked(): bool
+    private function isUserBlocked(int $userId): bool
     {
-        $sql = "SELECT date_block FROM bun WHERE id_user = {$this->id} LIMIT 1";
+        $sql = "SELECT date_block FROM bun WHERE id_user = {$userId} LIMIT 1";
         $result = $this->db->query($sql);
         if (!$result || $result->num_rows === 0) {
             return false;
         }
         $row = $result->fetch_assoc();
+
         if (is_null($row['date_block'])) {
             return true;
         }
-
-        $now = date('Y-m-d H:i:s');
-        return $now <= $row['date_block'];
-
+        $currentTime = time();
+        $banTime = strtotime($row['date_block']);
+        if ($currentTime > $banTime) {
+            $this->db->query("DELETE FROM bun WHERE id_user = {$userId}");
+            return false;
+        }
+        return true;
     }
+
+
+
 
 
     public function blockTemporarily(int $userId, string $dateBlock): bool
-{
-    $createdAt = date('Y-m-d H:i:s');
+    {
+        $createdAt = date('Y-m-d H:i:s');
 
-    $sql = "INSERT INTO bun (id_user, date_block, created_at) VALUES ($userId, '$dateBlock', '$createdAt')
-            ON DUPLICATE KEY UPDATE date_block = '$dateBlock', created_at = '$createdAt'";
-    $result = $this->db->query($sql);
-    echo "Ошибка: " . $this->db->error;
+        $sql = "INSERT INTO bun (id_user, date_block, created_at) VALUES ($userId, '$dateBlock', '$createdAt')
+        ON DUPLICATE KEY UPDATE date_block = '$dateBlock', created_at = '$createdAt'";
 
-    if (!$result) {
-        echo "Ошибка: " . $this->db->error;
+        $result = $this->db->query($sql);
 
-        error_log("SQL error: " . $this->db->error);
-        return false;
+        if (!$result) {
+            die("SQL error: " . $this->db->error);
+            return false;
+        }
+
+        return true;
     }
-    return true;
-}
 
 
 
@@ -266,5 +270,4 @@ class User
 
         return $ok;
     }
-
 }

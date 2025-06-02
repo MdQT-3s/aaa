@@ -110,7 +110,7 @@ class CommentClass extends Data
         echo '<ul class="comment-list">';
         foreach ($children as $comment) {
             ?>
-            <li class="comment">
+            <li class="conteiner">
                 <div class="comment-body">
                     <div class="d-flex justify-content-between">
                         <h3><?= $comment->login ?></h3>

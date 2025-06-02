@@ -3,8 +3,8 @@
 return [
     "serverName"=> "127.0.0.1",
     "login"=> "root",
-    "password"=> 'root',
-    "tableName"=> "muDB",
-    "port"=> 8889
+    "password"=> '',
+    "tableName"=> "MuDB",
+    "port"=> 3306
 
 ];
