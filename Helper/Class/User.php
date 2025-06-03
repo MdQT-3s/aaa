@@ -203,23 +203,26 @@ class User
 
     private function isUserBlocked(int $userId): bool
     {
+        $currentTime = date('Y-m-d H:i:s');
+        $this->db->query("DELETE FROM bun WHERE id_user = {$userId} AND date_block IS NOT NULL AND date_block < '$currentTime'");
         $sql = "SELECT date_block FROM bun WHERE id_user = {$userId} LIMIT 1";
         $result = $this->db->query($sql);
+
         if (!$result || $result->num_rows === 0) {
             return false;
         }
+
         $row = $result->fetch_assoc();
 
         if (is_null($row['date_block'])) {
             return true;
         }
-        $currentTime = time();
-        $banTime = strtotime($row['date_block']);
-        if ($currentTime > $banTime) {
-            $this->db->query("DELETE FROM bun WHERE id_user = {$userId}");
-            return false;
+
+        if (strtotime($row['date_block']) > time()) {
+            return true;
         }
-        return true;
+
+        return false;
     }
 
 
