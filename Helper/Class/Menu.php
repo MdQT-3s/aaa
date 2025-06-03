@@ -10,6 +10,7 @@ class Menu
     }
     public function createHtml()
     {
+        $currentPath = basename($_SERVER['PHP_SELF']); 
         $html = '<ul>';
         foreach ($this->items as $item) {
             $title = $item['title'] ?? '';
@@ -25,7 +26,8 @@ class Menu
             }
             $params = $item['params'] ?? [];
             $url = $this->response->getLink($file, $params);
-            $html .= "<li><a href=\"{$url}\">{$title}</a></li>";
+            $activeClass = ($currentPath === $item["file"]) ? ' class="colorlib-active"' : ''; 
+            $html .= "<li $activeClass><a href=\"{$url}\">{$title}</a></li>"; 
         }
         $html .= '</ul>';
         return $html;
